@@ -20,6 +20,7 @@ RUN export LC_ALL=en_US.UTF-8 \
      gcc \
      python-pip \
      python-devel \
+     python3-devel \
      libjpeg-turbo \
      libjpeg-turbo-devel \
      zlib-devel \
