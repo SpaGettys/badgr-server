@@ -1,8 +1,8 @@
 # encoding: utf-8
-from __future__ import unicode_literals
+
 
 import os.path
-from urllib import quote_plus
+from urllib.parse import quote_plus
 
 import os
 from django.contrib.auth import get_user_model

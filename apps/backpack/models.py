@@ -1,5 +1,5 @@
 # encoding: utf-8
-from __future__ import unicode_literals
+
 
 import os
 from collections import OrderedDict
@@ -122,14 +122,14 @@ class BackpackCollection(BaseAuditedModel, BaseVersionedEntity):
                 except BadgeInstance.DoesNotExist:
                     pass
                 else:
-                    if badgeinstance.entity_id not in existing_badges.keys():
+                    if badgeinstance.entity_id not in list(existing_badges.keys()):
                         BackpackCollectionBadgeInstance.cached.get_or_create(
                             collection=self,
                             badgeinstance=badgeinstance
                         )
 
             # remove badges no longer in collection
-            for badge_entity_id, badgeinstance in existing_badges.items():
+            for badge_entity_id, badgeinstance in list(existing_badges.items()):
                 if not _is_in_requested_badges(badge_entity_id):
                     BackpackCollectionBadgeInstance.objects.filter(
                         collection=self,
@@ -189,7 +189,7 @@ class BackpackCollectionBadgeInstance(cachemodel.CacheModel):
 
 
 class BaseSharedModel(cachemodel.CacheModel, CreatedUpdatedAt):
-    SHARE_PROVIDERS = [(p.provider_code, p.provider_name) for code,p in SharingManager.ManagerProviders.items()]
+    SHARE_PROVIDERS = [(p.provider_code, p.provider_name) for code,p in list(SharingManager.ManagerProviders.items())]
     provider = models.CharField(max_length=254, choices=SHARE_PROVIDERS)
     source = models.CharField(max_length=254, default="unknown")
 

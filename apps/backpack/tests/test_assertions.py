@@ -138,7 +138,7 @@ class TestBadgeUploads(BadgrTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(
             response.data.get('json').get('badge').get('description'),
-            u'Basic as it gets. v1.0'
+            'Basic as it gets. v1.0'
         )
 
     @responses.activate

@@ -1,9 +1,9 @@
 # encoding: utf-8
-from __future__ import unicode_literals
+
 
 import base64
 import json
-from urllib import quote_plus
+from urllib.parse import quote_plus
 
 from django.core.files.images import get_image_dimensions
 from django.core.urlresolvers import reverse
@@ -548,14 +548,14 @@ class BadgeClassTests(SetupIssuerHelper, BadgrTestCase):
             self.assertEqual(response.status_code, 201)
             self.assertIsNotNone(response.data)
             new_badgeclass = response.data['result'][0]
-            self.assertIn('alignments', new_badgeclass.keys())
+            self.assertIn('alignments', list(new_badgeclass.keys()))
             self.assertEqual(len(new_badgeclass['alignments']), 2)
             self.assertEqual(
                 new_badgeclass['alignments'][0]['targetName'], badgeclass_props['alignments'][0]['targetName'])
 
             # verify that public page renders markdown as html
             response = self.client.get('/public/badges/{}?v=2_0'.format(new_badgeclass.get('entityId')))
-            self.assertIn('alignment', response.data.keys())
+            self.assertIn('alignment', list(response.data.keys()))
             self.assertEqual(len(response.data['alignment']), 2)
             self.assertEqual(
                 response.data['alignment'][0]['targetName'], badgeclass_props['alignments'][0]['targetName'])
@@ -998,7 +998,7 @@ class BadgeClassTests(SetupIssuerHelper, BadgrTestCase):
         response = self.client.get("/public/badges/{badge}".format(badge=badgeclass.get('entityId')))
         self.assertEqual(response.status_code, 200)
         public_json = json.loads(response.content)
-        for extension_name, extension_data in example_extensions.items():
+        for extension_name, extension_data in list(example_extensions.items()):
             self.assertDictEqual(public_json.get(extension_name), extension_data)
 
     def test_null_description_not_serialized(self):

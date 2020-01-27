@@ -1,6 +1,6 @@
 import base64
 import re
-import urlparse
+import urllib.parse
 
 from datetime import datetime, timedelta
 from hashlib import sha1
@@ -83,7 +83,7 @@ class BadgrAppManager(Manager):
                 pass
 
         if origin:
-            url = urlparse.urlparse(origin)
+            url = urllib.parse.urlparse(origin)
             try:
                 return self.get(cors=url.netloc)
             except self.model.DoesNotExist:

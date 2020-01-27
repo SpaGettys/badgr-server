@@ -1,5 +1,5 @@
 # encoding: utf-8
-from __future__ import unicode_literals
+
 
 import datetime
 import dateutil.parser
@@ -9,7 +9,7 @@ from openbadges_bakery import unbake
 import png
 import pytz
 import re
-from urllib import quote_plus
+from urllib.parse import quote_plus
 
 from django.core import mail
 from django.core.urlresolvers import reverse
@@ -61,7 +61,7 @@ class AssertionTests(SetupIssuerHelper, BadgrTestCase):
             per_page=per_page
         ))
         while more_pages_present:
-            self.assertEquals(response.status_code, 200)
+            self.assertEqual(response.status_code, 200)
 
             page = response.data
             expected_page_count = min(total_assertion_count-number_seen, per_page)
@@ -72,10 +72,10 @@ class AssertionTests(SetupIssuerHelper, BadgrTestCase):
             self.assertIsNotNone(link_header)
             links = _parse_link_header(link_header)
             if page_number != 0:
-                self.assertTrue('prev' in links.keys())
+                self.assertTrue('prev' in list(links.keys()))
 
             if number_seen < total_assertion_count:
-                self.assertTrue('next' in links.keys())
+                self.assertTrue('next' in list(links.keys()))
                 next_url = links.get('next')
                 response = self.client.get(next_url)
                 page_number += 1
@@ -97,7 +97,7 @@ class AssertionTests(SetupIssuerHelper, BadgrTestCase):
         v1_data = json.loads(str(unbake(test_assertion.image)))
 
         self.assertDictContainsSubset({
-            '@context': u'https://w3id.org/openbadges/v1'
+            '@context': 'https://w3id.org/openbadges/v1'
         }, v1_data)
 
         original_image_url = test_assertion.image_url()
@@ -108,7 +108,7 @@ class AssertionTests(SetupIssuerHelper, BadgrTestCase):
         self.assertTrue(v2_datastr)
         v2_data = json.loads(v2_datastr)
         self.assertDictContainsSubset({
-            '@context': u'https://w3id.org/openbadges/v2'
+            '@context': 'https://w3id.org/openbadges/v2'
         }, v2_data)
 
     def test_put_rebakes_assertion(self):

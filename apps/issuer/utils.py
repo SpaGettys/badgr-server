@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 import aniso8601
 import hashlib
 import pytz

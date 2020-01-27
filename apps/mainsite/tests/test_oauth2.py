@@ -1,5 +1,5 @@
 import base64
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from django.core.cache import cache
 from django.test import override_settings

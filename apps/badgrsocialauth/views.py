@@ -1,5 +1,5 @@
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 
 from allauth.account.adapter import get_adapter
 from allauth.socialaccount.providers.base import AuthProcess
@@ -100,13 +100,13 @@ class BadgrSocialAccountVerifyEmail(RedirectView):
         verification_email = get_session_verification_email(self.request)
 
         if verification_email is not None:
-            verification_email = urllib.quote(verification_email.encode('utf-8'))
+            verification_email = urllib.parse.quote(verification_email.encode('utf-8'))
         else:
             verification_email = ''
 
         if badgr_app is not None:
             base_64_email = base64.urlsafe_b64encode(verification_email)
-            return urlparse.urljoin(badgr_app.ui_signup_success_redirect.rstrip('/') + '/', base_64_email)
+            return urllib.parse.urljoin(badgr_app.ui_signup_success_redirect.rstrip('/') + '/', base_64_email)
 
 
 class BadgrAccountConnected(RedirectView):
@@ -180,11 +180,11 @@ def assertion_consumer_service(request, idp_name):
         entity.BINDING_HTTP_POST)
     authn_response.get_identity()
     if len(set(settings.SAML_EMAIL_KEYS) & set(authn_response.ava.keys())) == 0:
-        raise ValidationError('Missing email in SAML assertions, received {}'.format(authn_response.ava.keys()))
+        raise ValidationError('Missing email in SAML assertions, received {}'.format(list(authn_response.ava.keys())))
     if len(set(settings.SAML_FIRST_NAME_KEYS) & set(authn_response.ava.keys())) == 0:
-        raise ValidationError('Missing first_name in SAML assertions, received {}'.format(authn_response.ava.keys()))
+        raise ValidationError('Missing first_name in SAML assertions, received {}'.format(list(authn_response.ava.keys())))
     if len(set(settings.SAML_LAST_NAME_KEYS) & set(authn_response.ava.keys())) == 0:
-        raise ValidationError('Missing last_name in SAML assertions, received {}'.format(authn_response.ava.keys()))
+        raise ValidationError('Missing last_name in SAML assertions, received {}'.format(list(authn_response.ava.keys())))
     email = [authn_response.ava[key][0] for key in settings.SAML_EMAIL_KEYS if key in authn_response.ava][0]
     first_name = [authn_response.ava[key][0] for key in settings.SAML_FIRST_NAME_KEYS if key in authn_response.ava][0]
     last_name = [authn_response.ava[key][0] for key in settings.SAML_LAST_NAME_KEYS if key in authn_response.ava][0]
@@ -233,7 +233,7 @@ def auto_provision(request, email, first_name, last_name, badgr_app, config):
         # Email exists and is already verified
         return redirect("{url}?authError={message}".format(
             url=badgr_app.ui_signup_failure_redirect,
-            message=urllib.quote("Authentication Error")))
+            message=urllib.parse.quote("Authentication Error")))
     except CachedEmailAddress.DoesNotExist:
         # Email does not exist, auto-provision account and log in
         return login(new_account(email))

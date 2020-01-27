@@ -1,9 +1,9 @@
 """
 Utility functions and constants that might be used across the project.
 """
-from __future__ import unicode_literals
 
-import StringIO
+
+import io
 import base64
 import datetime
 import hashlib
@@ -11,8 +11,8 @@ import json
 import re
 import puremagic
 import requests
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import uuid
 from xml.etree import cElementTree as ET
 
@@ -76,7 +76,7 @@ class OriginSettingsObject(object):
 
     @property
     def DEFAULT_HTTP_PROTOCOL(self):
-        parsed = urlparse.urlparse(self.HTTP)
+        parsed = urllib.parse.urlparse(self.HTTP)
         return parsed.scheme
 
     @property
@@ -197,7 +197,7 @@ def fetch_remote_file_to_storage(remote_url, upload_to='', allowed_mime_types=()
         string_to_write_to_file = stripped_svg_string or r.content
 
         if not store.exists(storage_name):
-            buf = StringIO.StringIO(string_to_write_to_file)
+            buf = io.StringIO(string_to_write_to_file)
             store.save(storage_name, buf)
         return r.status_code, storage_name
     return r.status_code, None
@@ -261,7 +261,7 @@ def throttleable(f):
                     iterate_backoff_count(backoff),
                     timeout=max_backoff
                 )
-        except Exception, e:
+        except Exception as e:
             cache.set(
                 backoff_cache_key(username, client_ip),
                 iterate_backoff_count(backoff),
@@ -287,7 +287,7 @@ def generate_entity_uri():
 def first_node_match(graph, condition):
     """return the first dict in a list of dicts that matches condition dict"""
     for node in graph:
-        if all(item in node.items() for item in condition.items()):
+        if all(item in list(node.items()) for item in list(condition.items())):
             return node
 
 
@@ -314,11 +314,11 @@ def set_url_query_params(url, **kwargs):
     Given a url, possibly including query parameters, return a url with the given query parameters set, replaced on a
     per-key basis.
     """
-    url_parts = list(urlparse.urlparse(url))
-    query = dict(urlparse.parse_qsl(url_parts[4]))
+    url_parts = list(urllib.parse.urlparse(url))
+    query = dict(urllib.parse.parse_qsl(url_parts[4]))
     query.update(kwargs)
-    url_parts[4] = urllib.urlencode(query)
-    return urlparse.urlunparse(url_parts)
+    url_parts[4] = urllib.parse.urlencode(query)
+    return urllib.parse.urlunparse(url_parts)
 
 
 def _request_authenticated_with_admin_scope(request):

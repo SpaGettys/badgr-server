@@ -7,8 +7,8 @@ import pytz
 import re
 import responses
 import shutil
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import warnings
 
 from django.core import mail
@@ -157,20 +157,20 @@ class TestSignup(BadgrTestCase):
         expected_redirect_url = '{badgrapp_redirect}{first_name}?authToken={auth}&email={email}'.format(
             badgrapp_redirect=badgr_app.email_confirmation_redirect,
             first_name=post_data['first_name'],
-            email=urllib.quote(post_data['email']),
+            email=urllib.parse.quote(post_data['email']),
             auth=user.auth_token
         )
 
         response = self.client.get(confirm_url, follow=False)
         self.assertEqual(response.status_code, 302)
 
-        actual = urlparse.urlparse(response.get('location'))
-        expected = urlparse.urlparse(expected_redirect_url)
+        actual = urllib.parse.urlparse(response.get('location'))
+        expected = urllib.parse.urlparse(expected_redirect_url)
         self.assertEqual(actual.netloc, expected.netloc)
         self.assertEqual(actual.scheme, expected.scheme)
 
-        actual_query = urlparse.parse_qs(actual.query)
-        expected_query = urlparse.parse_qs(expected.query)
+        actual_query = urllib.parse.parse_qs(actual.query)
+        expected_query = urllib.parse.parse_qs(expected.query)
         self.assertEqual(actual_query.get('email'), expected_query.get('email'))
         self.assertIsNotNone(actual_query.get('authToken'))
 
@@ -337,7 +337,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
         try:
             shutil.rmtree(dir)
         except OSError as e:
-            print ("%s does not exist and was not deleted" % 'me')
+            print(("%s does not exist and was not deleted" % 'me'))
 
     def mimic_hashed_file_name(self, name, ext=''):
         return hashlib.md5(name).hexdigest() + ext
