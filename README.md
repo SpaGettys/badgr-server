@@ -73,7 +73,7 @@ Start in your `badgr` directory and clone badgr-ui source code: `git clone https
 For more details view the Readme for [Badgr UI](https://github.com/concentricsky/badgr-ui).
 
 ### Run a server locally for development
-* `./manage.py runserver`
+* `./manage.py runserver 0:8000`
 * Navigate to http://localhost:8000/staff
 * Sign in as your superuser you created above
 

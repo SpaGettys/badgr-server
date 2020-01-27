@@ -410,7 +410,7 @@ class BackpackCollectionJson(JSONComponentView):
     entity_id_field_name = 'share_hash'
 
     def get_context_data(self, **kwargs):
-        chosen_assertion = sorted(self.current_object.cached_badgeinstances(), lambda a,b: cmp(a.issued_on, b.issued_on))[0]
+        chosen_assertion = sorted(self.current_object.cached_badgeinstances(), key = lambda a: a.issued_on)[0]
         image_url = "{}{}?type=png".format(
             OriginSetting.HTTP,
             reverse('badgeinstance_image', kwargs={'entity_id': chosen_assertion.entity_id})

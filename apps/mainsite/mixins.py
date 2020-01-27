@@ -21,6 +21,7 @@ class ResizeUploadedImage(object):
     def save(self, *args, **kwargs):
         if self.pk is None and self.image:
             try:
+#                f = open(self.image.path,'rb')
                 image = Image.open(self.image)
                 if _decompression_bomb_check(image):
                     raise ValidationError("Invalid image")
@@ -59,8 +60,8 @@ class ScrubUploadedSvgImage(object):
             tree = safe_parse(self.image.file)
             scrubSvgElementTree(tree.getroot())
 
-            buf = io.StringIO()
+            buf = io.BytesIO()
             tree.write(buf)
 
-            self.image = InMemoryUploadedFile(buf, 'image', self.image.name, 'image/svg+xml', buf.len, 'utf8')
+            self.image = InMemoryUploadedFile(buf, 'image', self.image.name, 'image/svg+xml', sys.getsizeof(buf), 'utf8')
         return super(ScrubUploadedSvgImage, self).save(*args, **kwargs)

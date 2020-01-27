@@ -92,7 +92,7 @@ Cache Utilities
 def filter_cache_key(key, key_prefix, version):
     generated_key = ':'.join([key_prefix, str(version), key])
     if len(generated_key) > 250:
-        return hashlib.md5(generated_key).hexdigest()
+        return hashlib.md5(generated_key.encode('utf-8')).hexdigest()
     return generated_key
 
 
@@ -191,13 +191,13 @@ def fetch_remote_file_to_storage(remote_url, upload_to='', allowed_mime_types=()
 
         storage_name = '{upload_to}/cached/{filename}{ext}'.format(
             upload_to=upload_to,
-            filename=hashlib.md5(remote_url).hexdigest(),
+            filename=hashlib.md5(remote_url.encode('utf-8')).hexdigest(),
             ext=derived_ext)
 
         string_to_write_to_file = stripped_svg_string or r.content
 
         if not store.exists(storage_name):
-            buf = io.StringIO(string_to_write_to_file)
+            buf = io.BytesIO(string_to_write_to_file)
             store.save(storage_name, buf)
         return r.status_code, storage_name
     return r.status_code, None

@@ -18,7 +18,8 @@ django-basic-models==3.0.4
 
 django-object-actions==0.8.2
 
-python-memcached==1.58
+# python-memcached==1.58
+python3-memcached==1.51
 
 djangorestframework==3.9.1
 
@@ -37,7 +38,8 @@ django-oauth-toolkit==1.1.2
 django-cors-headers==1.1.0
 django-autoslug==1.9.3
 puremagic==1.6
-wsgiref==0.1.2
+# wsgiref==0.1.2
+uwsgi==2.0.18
 sqlparse==0.1.14
 netaddr
 defusedxml

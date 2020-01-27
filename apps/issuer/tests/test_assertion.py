@@ -625,7 +625,7 @@ class AssertionTests(SetupIssuerHelper, BadgrTestCase):
         for chunk in reader.chunks():
             if chunk[0] == 'IDAT':
                 image_data_present = True
-            elif chunk[0] == 'iTXt' and chunk[1].startswith('openbadges\x00\x00\x00\x00\x00'):
+            elif chunk[0] == 'iTXt' and chunk[1].decode().startswith('openbadges\x00\x00\x00\x00\x00'):
                 badge_data_present = True
 
         self.assertTrue(image_data_present and badge_data_present)

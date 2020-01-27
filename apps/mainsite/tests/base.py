@@ -158,7 +158,7 @@ class SetupIssuerHelper(object):
             name = 'Test Badgeclass #{}'.format(random.random)
 
         if image is None:
-            image = open(self.get_test_image_path(), 'r')
+            image = open(self.get_test_image_path(), 'rb')
 
         badgeclass = BadgeClass.objects.create(
             issuer=issuer,

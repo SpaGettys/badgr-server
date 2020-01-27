@@ -1,6 +1,7 @@
 import json
 import random
 import string
+import base64
 
 from allauth.account.managers import EmailAddressManager
 from allauth.account.adapter import get_adapter
@@ -95,7 +96,7 @@ class BadgeUserManager(UserManager):
         source = kwargs['source']
         expires_seconds = getattr(settings, 'AUTH_TIMEOUT_SECONDS', 7 * 86400)
         payload = kwargs.copy()
-        payload['nonce'] = b''.join(random.choice(string.ascii_uppercase) for _ in range(random.randint(20, 30)))
+        payload['nonce'] = base64.b64encode(b''.join(random.choice(string.ascii_uppercase).encode('utf-8') for _ in range(random.randint(20, 30)))).decode('ascii')
         payload = json.dumps(payload)
 
         authcode = encrypt_authcode(payload, expires_seconds=expires_seconds)

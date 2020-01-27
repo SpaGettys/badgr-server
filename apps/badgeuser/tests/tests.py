@@ -858,7 +858,7 @@ class UserBadgeTests(BadgrTestCase):
         self.badgr_app.save()
 
     def create_badgeclass(self):
-        with open(os.path.join(TOP_DIR, 'apps', 'issuer', 'testfiles', 'guinea_pig_testing_badge.png'), 'r') as fh:
+        with open(os.path.join(TOP_DIR, 'apps', 'issuer', 'testfiles', 'guinea_pig_testing_badge.png'), 'rb') as fh:
             issuer = Issuer.objects.create(name='Issuer of Testing')
             badgeclass = BadgeClass.objects.create(
                 issuer=issuer,

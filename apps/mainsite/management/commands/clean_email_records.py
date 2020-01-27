@@ -1,3 +1,4 @@
+import sys
 from smtplib import SMTPException
 
 from django.core.management.base import BaseCommand
@@ -54,16 +55,19 @@ class Command(BaseCommand):
                         except SMTPException as e:
                             raise e
                         except Exception as e:
+                            tb = sys.exc_info()[2]
                             raise SMTPException("Error sending mail to {} -- {}".format(
-                                new_primary.email, e.message
+                                new_primary.email, e.with_traceback(tb)
                             ))
             except IntegrityError as e:
+                tb = sys.exc_info()[2]
                 user_errors += 1
-                self.stdout.write("Error in user {} record: {}".format(user.pk, e.message))
+                self.stdout.write("Error in user {} record: {}".format(user.pk, e.with_traceback(tb)))
                 continue
             except SMTPException as e:
+                tb = sys.exc_info()[2]
                 email_errors += 1
-                self.stdout.write("Could not send mail: {}".format(e.message))
+                self.stdout.write("Could not send mail: {}".format(e.with_traceback(tb)))
 
         self.stdout.write(
             "Done cleaning email: {} users, {} updated primaries, {} user errors, {} email errors.".format(

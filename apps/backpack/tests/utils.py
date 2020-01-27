@@ -26,7 +26,7 @@ def setup_basic_1_0(**kwargs):
     if not kwargs or not 'http://a.com/badgeclass_image' in kwargs.get('exclude', []):
         responses.add(
             responses.GET, 'http://a.com/badgeclass_image',
-            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png')).read(),
+            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png'),'rb').read(),
             status=200, content_type='image/png'
         )
 
@@ -52,7 +52,7 @@ def setup_basic_1_0_bad_image(**kwargs):
     if not kwargs or not 'http://a.com/badgeclass_image' in kwargs.get('exclude', []):
         responses.add(
             responses.GET, 'http://a.com/badgeclass_image',
-            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/bad_image.png')).read(),
+            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/bad_image.png'),'rb').read(),
             status=200, content_type='image/png'
         )
 
@@ -60,7 +60,7 @@ def setup_resources(resources):
     for item in resources:
         response_body = item.get('response_body')
         if response_body is None:
-            response_body = open(os.path.join(CURRENT_DIRECTORY, 'testfiles', item['filename'])).read()
+            response_body = open(os.path.join(CURRENT_DIRECTORY, 'testfiles', item['filename']),'rb').read()
         responses.add(
             responses.GET, item['url'],
             body=response_body,
@@ -79,6 +79,6 @@ def setup_basic_0_5_0(**kwargs):
     if not kwargs or not 'http://oldstyle.com/images/1' in kwargs.get('exclude'):
         responses.add(
             responses.GET, 'http://oldstyle.com/images/1',
-            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png')).read(),
+            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png'),'rb').read(),
             status=200, content_type='image/png'
         )

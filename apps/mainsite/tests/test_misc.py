@@ -319,7 +319,7 @@ class TestBlacklist(BadgrTestCase):
         # The generate_hash function implementation should not change; We risk contacting people on the blacklist
         for (id_type, id_value) in self.Inputs:
             got = blacklist.generate_hash(id_type, id_value)
-            expected = "{id_type}$sha256${hash}".format(id_type=id_type, hash=sha256(id_value).hexdigest())
+            expected = "{id_type}$sha256${hash}".format(id_type=id_type, hash=sha256(id_value.encode('utf-8')).hexdigest())
             self.assertEqual(got, expected)
 
 
@@ -340,7 +340,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
             print(("%s does not exist and was not deleted" % 'me'))
 
     def mimic_hashed_file_name(self, name, ext=''):
-        return hashlib.md5(name).hexdigest() + ext
+        return hashlib.md5(name.encode('utf-8')).hexdigest() + ext
 
     @responses.activate
     def test_svg_without_extension(self):
@@ -350,7 +350,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
         responses.add(
             responses.GET,
             self.test_url,
-            body=open(self.get_hacked_svg_image_path()).read(),
+            body=open(self.get_hacked_svg_image_path(),'rb').read(),
             status=200
         )
 
@@ -370,7 +370,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
         responses.add(
             responses.GET,
             self.test_url,
-            body=open(self.get_test_svg_image_path()).read(),
+            body=open(self.get_test_svg_image_path(),'rb').read(),
             status=200
         )
 
@@ -385,7 +385,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
 
     @responses.activate
     def test_scrubs_hacked_svg(self):
-        hacked_svg = open(self.get_hacked_svg_image_path()).read()
+        hacked_svg = open(self.get_hacked_svg_image_path(),'rb').read()
 
         responses.add(
             responses.GET,
@@ -405,7 +405,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
             file_name=storage_name)
         )
             
-        saved_svg = open(saved_svg_path).read()[0]
+        saved_svg = open(saved_svg_path,'rt').read()[0]
 
         self.assertNotIn('onload', saved_svg)
         self.assertNotIn('<script>', saved_svg)
@@ -420,7 +420,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
         responses.add(
                 responses.GET,
                 self.test_url,
-                body=open(self.get_test_png_with_no_extension_image_path()).read(),
+                body=open(self.get_test_png_with_no_extension_image_path(),'rb').read(),
                 status=200
             )
 
@@ -441,7 +441,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
         responses.add(
                 responses.GET,
                 self.test_url,
-                body=open(self.get_test_png_image_path()).read(),
+                body=open(self.get_test_png_image_path(),'rb').read(),
                 status=200
             )
 
@@ -461,7 +461,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
         responses.add(
             responses.GET,
             self.test_url,
-            body=open(self.get_test_jpeg_with_no_extension_image_path()).read(),
+            body=open(self.get_test_jpeg_with_no_extension_image_path(),'rb').read(),
             status=200
         )
 
@@ -482,7 +482,7 @@ class TestRemoteFileToStorage(SetupIssuerHelper, BadgrTestCase):
         responses.add(
             responses.GET,
             self.test_url,
-            body=open(self.get_test_jpeg_image_path()).read(),
+            body=open(self.get_test_jpeg_image_path(),'rb').read(),
             status=200
         )
 

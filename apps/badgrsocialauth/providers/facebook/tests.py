@@ -52,6 +52,6 @@ class VerifiedFacebookProviderTests(DoesNotSendVerificationEmailMixin, BadgrOAut
         self.assertEqual(response.status_code, 302)
         url = urllib.parse.urlparse(response._headers['location'][1])
         query = dict(urllib.parse.parse_qsl(url[4]))
-        self.assertEqual(base64.urlsafe_b64decode(query['email']), 'raymond.penners@example.com')
+        self.assertEqual(base64.urlsafe_b64decode(query['email']).decode('utf-8'), 'raymond.penners@example.com')
         self.assertEqual(query['socialAuthSlug'], 'facebook')
         self.assertEqual(url.path, "/fail")

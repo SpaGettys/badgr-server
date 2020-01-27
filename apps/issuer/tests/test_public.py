@@ -159,9 +159,9 @@ class PublicAPITests(SetupIssuerHelper, BadgrTestCase):
         test_collection.published = True
         test_collection.save()
         self.assertIsNotNone(test_collection.share_url)
-
+        
         response = self.client.get(
-            '/public/collections/{}'.format(test_collection.share_hash), header={'Accept': 'application/json'}
+            '/public/collections/{}'.format(test_collection.share_hash.decode('utf-8')), header={'Accept': 'application/json'}
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['entityId'], test_collection.entity_id)

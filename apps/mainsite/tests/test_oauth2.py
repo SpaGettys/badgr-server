@@ -174,7 +174,7 @@ class OAuth2TokenTests(SetupIssuerHelper, BadgrTestCase):
         response = self.client.get('/v2/users/self')
         self.assertEqual(response.status_code, 401)
 
-        with open(self.get_test_image_path(), 'r') as badge_image:
+        with open(self.get_test_image_path(), 'rb') as badge_image:
             badgeclass_data = {
                     'name': 'Badge of Slugs',
                     'description': "Recognizes slimy learners with a penchant for lettuce",

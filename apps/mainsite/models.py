@@ -37,8 +37,11 @@ class EmailBlacklist(models.Model):
         expiration = datetime.utcnow() + timedelta(days=7)  # In one week.
         timestamp = int((expiration - datetime(1970, 1, 1)).total_seconds())
 
-        email_encoded = base64.b64encode(email)
-        hashed = hmac.new(secret_key, email_encoded + str(timestamp), sha1)
+        email_encoded = str(base64.b64encode(email.encode()))
+        enc_secret_key = secret_key.encode('utf-8')
+        enc_timestamp = str(timestamp)
+        enc_email_stamp = email_encoded + enc_timestamp
+        hashed = hmac.new(enc_secret_key, enc_email_stamp.encode('utf-8'), sha1)
 
         if badgrapp_pk is None:
             badgrapp_pk = BadgrApp.objects.get_by_id_or_default().pk
@@ -296,7 +299,7 @@ class AccessTokenProxy(AccessToken):
     def entity_id(self):
         # fake an entityId for this non-entity
         digest = "{}{}".format(self.fake_entity_id_prefix, self.pk)
-        b64_string = base64.urlsafe_b64encode(digest)
+        b64_string = base64.urlsafe_b64encode(digest.decode())
         b64_trimmed = re.sub(r'=+$', '', b64_string)
         return b64_trimmed
 

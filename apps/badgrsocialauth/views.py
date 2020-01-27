@@ -88,7 +88,7 @@ class BadgrSocialEmailExists(RedirectView):
             return set_url_query_params(
                 badgr_app.ui_signup_failure_redirect,
                 authError='An account already exists with provided email address',
-                email=base64.urlsafe_b64encode(verification_email),
+                email=base64.urlsafe_b64encode(verification_email.encode('utf-8')),
                 socialAuthSlug=provider
             )
 

@@ -35,7 +35,7 @@ def encrypt_authcode(payload, expires_seconds=None, secret_key=None):
             raise ValueError("must specify a secret key")
 
     crypto = cryptography.fernet.Fernet(secret_key)
-    digest = crypto.encrypt(_marshall(payload, expires_seconds))
+    digest = crypto.encrypt(_marshall(payload, expires_seconds).encode('utf-8'))
     return digest
 
 
@@ -48,7 +48,8 @@ def decrypt_authcode(cipher, secret_key=None):
     crypto = cryptography.fernet.Fernet(secret_key)
 
     try:
-        decrypted = crypto.decrypt(cipher.encode('utf-8'))
+        cipher = cipher if type(cipher) is bytes else cipher.encode('utf-8')
+        decrypted = crypto.decrypt(cipher)
     except (cryptography.fernet.InvalidToken, UnicodeEncodeError, UnicodeDecodeError) as e:
         return None
     message = _unmarshall(decrypted)

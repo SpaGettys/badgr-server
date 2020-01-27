@@ -91,7 +91,7 @@ class TestBadgeUploads(BadgrTestCase):
 
         responses.add(
             responses.GET, 'http://a.com/badgeclass_image',
-            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png')).read(),
+            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png'),'rb').read(),
             status=200, content_type='image/png'
         )
 
@@ -173,7 +173,7 @@ class TestBadgeUploads(BadgrTestCase):
 
         responses.add(
             responses.GET, 'http://a.com/baked_image',
-            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png')).read(),
+            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png'),'rb').read(),
             status=200, content_type='image/png'
         )
 
@@ -201,7 +201,7 @@ class TestBadgeUploads(BadgrTestCase):
         ])
         self.setup_user(email='test@example.com', authenticate=True)
 
-        image = open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png'))
+        image = open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png'),'rb')
         post_input = {
             'image': image
         }
@@ -251,13 +251,13 @@ class TestBadgeUploads(BadgrTestCase):
             "url": "http://a.com/issuer/website"
         }
 
-        with open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png')) as image_file:
+        with open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png'),'rb') as image_file:
             original_image = bake(image_file, json.dumps(assertion_metadata))
             original_image.seek(0)
 
         responses.add(
             responses.GET, 'http://a.com/badgeclass_image',
-            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png')).read(),
+            body=open(os.path.join(CURRENT_DIRECTORY, 'testfiles/unbaked_image.png'),'rb').read(),
             status=200, content_type='image/png'
         )
 
@@ -334,8 +334,10 @@ class TestBadgeUploads(BadgrTestCase):
         ])
         self.setup_user(email='test@example.com', authenticate=True)
 
-        image = open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png'))
-        encoded = 'data:image/png;base64,' + base64.b64encode(image.read())
+        image = open(os.path.join(CURRENT_DIRECTORY, 'testfiles/baked_image.png'),'rb')
+        f = image.read()
+        enc64 = base64.b64encode(f)
+        encoded = 'data:image/png;base64,' + enc64.decode()
         post_input = {
             'image': encoded
         }

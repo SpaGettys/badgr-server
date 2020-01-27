@@ -63,7 +63,7 @@ def _generate_assertion_ob2(**kwargs):
 def _register_image_mock(url):
     responses.add(
         responses.GET, url,
-        body=open(os.path.join(BACKPACK_TESTS_DIRECTORY, 'testfiles/unbaked_image.png')).read(),
+        body=open(os.path.join(BACKPACK_TESTS_DIRECTORY, 'testfiles/unbaked_image.png'),'rb').read(),
         status=200, content_type='image/png'
     )
 

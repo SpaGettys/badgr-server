@@ -1,5 +1,6 @@
 *.pyc
 *.egg
+*.whl
 settings_local.py
 .*.sw*
 *~
