@@ -66,10 +66,10 @@ RUN  git clone https://github.com/anyenv/anyenv ~/.anyenv \
      && pyenv install 3.6.7
 
 RUN mkdir /badgr && cd badgr \
-     && virtualenv -p python3 env \
+     && virtualenv -p ~/.anyenv/envs/pyenv/versions/3.6.7/bin/python3 ./env \
      && source env/bin/activate \
      && pip install --upgrade pip \
-     && git clone -b tmp/feature/python3 https://github.com/shingom/badgr-server.git code \
+     && git clone -b feature/python3 https://github.com/shingom/badgr-server.git code \
      && cd code \
      && pip install -r requirements.txt
 
