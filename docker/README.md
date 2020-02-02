@@ -10,6 +10,10 @@ execute command below.
 ```
 docker-compose up
 ```
+if try to run on python3
+```
+docker-compose -f docker-compose.yml.python3 up
+```
 open URL below.
 
 * badgr-ui (http://localhost:4200)
@@ -33,5 +37,6 @@ docker
 |  |--data (this dir will be made by Mysql)
 |
 |--init
-|  |- init.sh (this will be executed at first time)
-|  |- settings_local.py.example (Django setting file)
+   |- init.sh (this will be executed at first time)
+   |- settings_local.py.example (Django setting file)
+
