@@ -37,6 +37,7 @@ docker
 |  |--data (this dir will be made by Mysql)
 |
 |--init
+<<<<<<< HEAD
    |- init.sh (this will be executed at first time)
    |- settings_local.py.example (Django setting file)
 
