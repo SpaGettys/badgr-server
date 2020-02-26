@@ -5,8 +5,8 @@ services:
   badgr:
     build:
       context: .
-      dockerfile: Dockerfile.ubuntu18
-#      dockerfile: Dockerfile.centos7
+      dockerfile: Dockerfile.ubuntu18.python3
+#      dockerfile: Dockerfile.centos7.python3
     depends_on:
     - db
     volumes:
